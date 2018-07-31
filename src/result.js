@@ -9,7 +9,7 @@ class Result extends Component {
         </div>
         <div className="score">
             <div>得分</div>
-            <div>0</div>
+            <div>{this.props.score}</div>
         </div>
       </div>
     );
