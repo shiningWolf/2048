@@ -35,7 +35,7 @@ function mergeArr(arr,bool){ //true：向上和向左，即下标从大到小合
         newArr[i].push('');
       }
     }else{
-      for(let j=0;j<arr[i].length;j++){
+      for(let j=arr[i].length-1;j>=0;j--){
         if(!arr[i][j]) continue;
         if(newArr[i][0] != arr[i][j]){
           newArr[i].unshift(arr[i][j]) 
@@ -124,25 +124,40 @@ class App extends Component {
       tmpArr = changeToSec(this.state.arr,'row');
       result = mergeArr(tmpArr,rowTo>10);
       tmpArr = returnOne(result.newArr,'row');
+      event.preventDefault();
+      tmpArr = this.getNum(tmpArr);
+      this.setState({arr:tmpArr,score:result.score+this.state.score});
     }else if(Math.abs(columnTo) > Math.abs(rowTo) && Math.abs(columnTo)>10){
       tmpArr = changeToSec(this.state.arr,'column');
       result = mergeArr(tmpArr,columnTo>10);
-      tmpArr = returnOne(result.newArr,'column'); 
+      tmpArr = returnOne(result.newArr,'column');
+      event.preventDefault();
+      tmpArr = this.getNum(tmpArr);
+      this.setState({arr:tmpArr,score:result.score+this.state.score});
     }
-    event.preventDefault();
-    tmpArr = this.getNum(tmpArr);
-    this.setState({arr:tmpArr,score:result.score+this.state.score});
 
   }
 
   getNum(arr){
-    let a = parseInt(Math.random() * 16);
-    while(arr[a]){
-      a = parseInt(Math.random() * 16); 
+    let newArr = this.getNullIndex(arr);
+    if(newArr.length > 0){  //还有空位
+      let a = parseInt(Math.random() * newArr.length);
+      arr[newArr[a]] = 2;
+    }else{  //已经填满
+      
     }
-    arr[a] = 2;
     return arr;
   }
+
+  getNullIndex(arr){  //获取空的索引
+    let newArr = [];
+    for(let i=0;i<arr.length;i++){
+      if(!arr[i])
+        newArr.push(i);
+    }
+    return newArr;
+  }
+
 }
 
 export default App;
