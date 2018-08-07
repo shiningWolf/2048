@@ -18,7 +18,7 @@ function changeToSec(arr,type){ //一维数组转换成二维数组
 }
 
 function mergeArr(arr,bool){ //true：向上和向左，即下标从大到小合并
-  let newArr = [],score = 0;
+  let newArr = [],score = 0,step = 0;
   for(let i=0;i<arr.length;i++){
     newArr.push([]);
     if(!bool){
@@ -29,6 +29,7 @@ function mergeArr(arr,bool){ //true：向上和向左，即下标从大到小合
         }else if(arr[i][j] && newArr[i][newArr[i].length-1] === arr[i][j]){
           newArr[i][newArr[i].length-1] = 2 *  newArr[i][newArr[i].length-1];
           score +=  newArr[i][newArr[i].length-1];
+          step++;
         }
       }
       while(newArr[i].length < 4){
@@ -42,6 +43,7 @@ function mergeArr(arr,bool){ //true：向上和向左，即下标从大到小合
         }else{
           newArr[i][0] = 2 *  newArr[i][0];
           score += newArr[i][0];
+          step++;
         }
       }
       while(newArr[i].length < 4){
@@ -128,14 +130,16 @@ class App extends Component {
       result = mergeArr(tmpArr,rowTo>10);
       tmpArr = returnOne(result.newArr,'row');
       event.preventDefault();
-      tmpArr = this.getNum(tmpArr);
+      if(!this.judgeSame(tmpArr,this.state.arr))
+        tmpArr = this.getNum(tmpArr);
       this.setState({arr:tmpArr,score:result.score+this.state.score});
     }else if(Math.abs(columnTo) > Math.abs(rowTo) && Math.abs(columnTo)>10){
       tmpArr = changeToSec(this.state.arr,'column');
       result = mergeArr(tmpArr,columnTo>10);
       tmpArr = returnOne(result.newArr,'column');
       event.preventDefault();
-      tmpArr = this.getNum(tmpArr);
+      if(!this.judgeSame(tmpArr,this.state.arr))
+        tmpArr = this.getNum(tmpArr);
       this.setState({arr:tmpArr,score:result.score+this.state.score});
     }
 
@@ -159,6 +163,17 @@ class App extends Component {
         newArr.push(i);
     }
     return newArr;
+  }
+
+  judgeSame(newArr,oldArr){
+    let state = true;
+    for(let i=0;i<newArr.length;i++){
+      if(newArr[i] != oldArr[i]){
+        state = false;
+        break;
+      }
+    }
+    return state;
   }
 
 }
