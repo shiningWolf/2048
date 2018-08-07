@@ -86,9 +86,11 @@ class App extends Component {
     this.columnTo = 1; //大于0说明往右
     this.touchStart = this.touchStart.bind(this);
     this.touchEnd = this.touchEnd.bind(this);
-    this.touchMove = this.touchMove.bind(this);
   }
   componentDidMount(){
+    document.body.addEventListener('touchmove', function (event) {
+        event.preventDefault();
+    });
     this.reset();
   }
 
@@ -97,7 +99,7 @@ class App extends Component {
       <div className="app">
         <Result score={this.state.score}/>
         <div className="tip">合并这些数字可以获得2048方块</div>
-        <Game arr={this.state.arr} touchStart={this.touchStart} touchEnd={this.touchEnd} touchMove={this.touchMove}/>
+        <Game arr={this.state.arr} touchStart={this.touchStart} touchEnd={this.touchEnd}/>
       </div>
     );
   }
@@ -113,10 +115,6 @@ class App extends Component {
     let touch = event.targetTouches[0];
     this.startPos.x = touch.pageX;
     this.startPos.y = touch.pageY;
-  }
-
-  touchMove(event){
-    event.preventDefault();
   }
 
   touchEnd (event){
